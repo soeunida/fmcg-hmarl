@@ -25,19 +25,6 @@
 
 ---
 
-## 📌 `fmcg_hmarl_baseline.py`
-
-### 구성 요약
-- 기본 SAC 기반 H-MARL 구조
-- 간단한 수요 모델링과 재고 관리
-- 글로벌 보상 기반 에이전트 학습
-- 정보 공유 및 bullwhip 제어 없음
-
-### 특징
-- 빠르고 단순한 실험 구조
-- Bullwhip Effect가 학습 중에 자연스럽게 발생
-- 비교군으로 사용 가능
-
 ### 실행 방법
 ```bash
 python3 fmcg_hmarl_baseline.py
