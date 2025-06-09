@@ -1,7 +1,7 @@
 # fmcg-hmarl
 # 🧠 FMCG Supply Chain Optimization via Cooperative H-MARL (Dec-POMDP + SAC)
 
-본 프로젝트는 Fast-Moving Consumer Goods (FMCG) 산업의 **4계층 공급망**을 대상으로, **Hierarchical Multi-Agent Reinforcement Learning (H-MARL)**을 이용한 **재고 보급 최적화 시스템**을 구현하고 평가합니다. 문제는 **Decentralized Partially Observable Markov Decision Process (Dec-POMDP)** 형태로 모델링되었으며, 각 에이전트는 SAC 기반의 연속 행동 공간을 학습합니다.
+본 프로젝트는 Fast-Moving Consumer Goods (FMCG) 산업의 **4계층 공급망**을 대상으로, Hierarchical Multi-Agent Reinforcement Learning (H-MARL)을 이용한 재고 보급 최적화 시스템을 구현하고 평가합니다. 문제는 **Decentralized Partially Observable Markov Decision Process (Dec-POMDP)** 형태로 모델링되었으며, 각 에이전트는 SAC 기반의 연속 행동 공간을 학습합니다.
 
 ---
 
