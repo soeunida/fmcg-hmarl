@@ -352,16 +352,12 @@ class EnhancedFMCGSupplyChain:
     def _configure_scenario(self):
         """시나리오별 환경 설정"""
         if self.scenario == 'high_volatility':
-            self.demand_volatility = 0.25  # 감소
+            self.demand_volatility = 0.25
             self.lead_time_uncertainty = 1.2
-        elif self.scenario == 'supply_disruption':
-            self.demand_volatility = 0.2
-            self.lead_time_uncertainty = 1.3
-            self.disruption_prob = 0.05  # 감소
         elif self.scenario == 'seasonal':
             self.demand_volatility = 0.2
             self.lead_time_uncertainty = 1.1
-            self.seasonal_amplitude = 0.3  # 감소
+            self.seasonal_amplitude = 0.3
         else:  # normal
             self.demand_volatility = config.DEMAND_VOLATILITY
             self.lead_time_uncertainty = 1.0
@@ -372,7 +368,7 @@ class EnhancedFMCGSupplyChain:
         self.inventories = np.array(config.INITIAL_INVENTORY, dtype=np.float32)
         
         # 수요 히스토리 초기화
-        self.demand_history = deque(maxlen=50)  # 더 긴 히스토리
+        self.demand_history = deque(maxlen=50)
         self.order_history = [deque(maxlen=20) for _ in range(self.num_echelons)]
         
         # 초기 수요 생성
@@ -569,11 +565,6 @@ class EnhancedFMCGSupplyChain:
         self.demand_history.append(current_demand)
         self.global_demand_forecast.append(current_demand)
         
-        # 공급 중단 (확률 감소)
-        supply_disruption = False
-        if hasattr(self, 'disruption_prob') and np.random.random() < self.disruption_prob:
-            supply_disruption = True
-        
         # 리드타임 업데이트
         self.current_lead_times = self._sample_lead_times()
         
@@ -581,8 +572,6 @@ class EnhancedFMCGSupplyChain:
         for i in range(self.num_echelons):
             if len(self.in_transit[i]) > 0:
                 arrived_qty = self.in_transit[i].popleft()
-                if supply_disruption and i > 0:
-                    arrived_qty *= 0.7  # 덜 심각한 공급 중단
                 self.inventories[i] += arrived_qty
         
         # 주문 처리
@@ -601,7 +590,7 @@ class EnhancedFMCGSupplyChain:
             
             if self.inventories[i + 1] >= order_demand:
                 self.inventories[i + 1] -= order_demand
-# 입고 스케줄링 (리드타임 고려)
+                # 입고 스케줄링 (리드타임 고려)
                 while len(self.in_transit[i]) < self.current_lead_times[i]:
                     self.in_transit[i].append(0)
                 self.in_transit[i].append(order_demand)
@@ -999,11 +988,12 @@ def plot_training_results(trainer):
     plt.show()
 
 def run_comparison_scenarios():
-    """시나리오별 비교 실험"""
-    scenarios = ['normal', 'high_volatility', 'supply_disruption', 'seasonal']
+    """시나리오별 비교 실험 (SEASONAL & HIGH_VOLATILITY만)"""
+    # 시나리오를 seasonal과 high_volatility만으로 제한
+    scenarios = ['seasonal', 'high_volatility']
     results = {}
     
-    print("Running scenario comparison experiments...")
+    print("Running scenario comparison experiments (SEASONAL & HIGH_VOLATILITY only)...")
     
     for scenario in scenarios:
         print(f"\n=== Testing Scenario: {scenario.upper()} ===")
@@ -1028,7 +1018,7 @@ def run_comparison_scenarios():
     
     # 결과 비교 출력
     print("\n" + "="*80)
-    print("SCENARIO COMPARISON RESULTS")
+    print("SCENARIO COMPARISON RESULTS (SEASONAL & HIGH_VOLATILITY)")
     print("="*80)
     
     comparison_df = pd.DataFrame(results).T
@@ -1036,25 +1026,25 @@ def run_comparison_scenarios():
     
     # 시각화
     fig, axes = plt.subplots(2, 2, figsize=(15, 10))
-    fig.suptitle('Scenario Comparison: Enhanced FMCG Supply Chain', fontsize=16)
+    fig.suptitle('Scenario Comparison: SEASONAL vs HIGH_VOLATILITY', fontsize=16)
     
     scenarios_list = list(results.keys())
     
     # 평균 보상
     rewards = [results[s]['avg_reward'] for s in scenarios_list]
-    axes[0, 0].bar(scenarios_list, rewards)
+    axes[0, 0].bar(scenarios_list, rewards, color=['skyblue', 'salmon'])
     axes[0, 0].set_title('Average Reward by Scenario')
     axes[0, 0].set_ylabel('Average Reward')
     
     # 평균 비용
     costs = [results[s]['avg_cost'] for s in scenarios_list]
-    axes[0, 1].bar(scenarios_list, costs)
+    axes[0, 1].bar(scenarios_list, costs, color=['lightgreen', 'orange'])
     axes[0, 1].set_title('Average Cost by Scenario')
     axes[0, 1].set_ylabel('Average Cost')
     
     # Bullwhip 비율
     bullwhip = [results[s]['avg_bullwhip'] for s in scenarios_list]
-    axes[1, 0].bar(scenarios_list, bullwhip)
+    axes[1, 0].bar(scenarios_list, bullwhip, color=['gold', 'lightcoral'])
     axes[1, 0].axhline(y=config.NUM_ECHELONS, color='r', linestyle='--', 
                       label=f'Target (≤{config.NUM_ECHELONS})')
     axes[1, 0].set_title('Average Bullwhip Ratio by Scenario')
@@ -1063,7 +1053,7 @@ def run_comparison_scenarios():
     
     # 서비스 레벨
     service = [results[s]['avg_service_level'] for s in scenarios_list]
-    axes[1, 1].bar(scenarios_list, service)
+    axes[1, 1].bar(scenarios_list, service, color=['mediumpurple', 'lightsteelblue'])
     axes[1, 1].axhline(y=0.95, color='g', linestyle='--', label='Target (95%)')
     axes[1, 1].set_title('Average Service Level by Scenario')
     axes[1, 1].set_ylabel('Service Level')
@@ -1074,7 +1064,7 @@ def run_comparison_scenarios():
     
     return results
 
-# 메인 실행 함수
+# 메인 실행 함수 (수정됨)
 def main():
     """메인 실행 함수"""
     print("Enhanced FMCG Multi-Echelon Supply Chain with Bullwhip Mitigation")
@@ -1087,44 +1077,37 @@ def main():
     print(f"- Demand Volatility: {config.DEMAND_VOLATILITY}")
     print("="*80)
     
-    # 환경 생성
-    env = EnhancedFMCGSupplyChain(scenario='normal')
-    trainer = MultiAgentTrainer(env)
-    
-    # 훈련
-    trained_agents = trainer.train()
-    
-    # 결과 시각화
-    plot_training_results(trainer)
-    
-    # 평가
-    evaluation_results = trainer.evaluate(trained_agents, num_episodes=50)
-    
-    # 시나리오 비교 (선택사항)
-    run_scenarios = input("\nRun scenario comparison experiments? (y/n): ").lower() == 'y'
-    if run_scenarios:
-        scenario_results = run_comparison_scenarios()
+    # 시나리오 비교만 실행 (SEASONAL & HIGH_VOLATILITY)
+    print("Running SEASONAL vs HIGH_VOLATILITY comparison...")
+    scenario_results = run_comparison_scenarios()
     
     print("\n" + "="*80)
     print("EXPERIMENT COMPLETED SUCCESSFULLY!")
     print("="*80)
     
-    # 최종 결과 요약
-    print(f"\nFinal Performance Summary:")
-    print(f"- Average Reward: {evaluation_results['avg_reward']:.2f}")
-    print(f"- Average Cost: {evaluation_results['avg_cost']:.2f}")
-    print(f"- Average Bullwhip Ratio: {evaluation_results['avg_bullwhip']:.3f}")
-    print(f"- Average Service Level: {evaluation_results['avg_service_level']:.3f}")
+    # 두 시나리오 결과 비교 요약
+    print(f"\nScenario Comparison Summary:")
+    print(f"SEASONAL Scenario:")
+    print(f"  - Average Reward: {scenario_results['seasonal']['avg_reward']:.2f}")
+    print(f"  - Average Cost: {scenario_results['seasonal']['avg_cost']:.2f}")
+    print(f"  - Average Bullwhip Ratio: {scenario_results['seasonal']['avg_bullwhip']:.3f}")
+    print(f"  - Average Service Level: {scenario_results['seasonal']['avg_service_level']:.3f}")
     
-    if evaluation_results['avg_bullwhip'] <= config.NUM_ECHELONS:
-        print("✅ Bullwhip Effect successfully mitigated!")
-    else:
-        print("⚠️  Bullwhip Effect needs further improvement.")
+    print(f"\nHIGH_VOLATILITY Scenario:")
+    print(f"  - Average Reward: {scenario_results['high_volatility']['avg_reward']:.2f}")
+    print(f"  - Average Cost: {scenario_results['high_volatility']['avg_cost']:.2f}")
+    print(f"  - Average Bullwhip Ratio: {scenario_results['high_volatility']['avg_bullwhip']:.3f}")
+    print(f"  - Average Service Level: {scenario_results['high_volatility']['avg_service_level']:.3f}")
     
-    if evaluation_results['avg_service_level'] >= 0.95:
-        print("✅ High service level achieved!")
+    # 승자 판별
+    seasonal_score = scenario_results['seasonal']['avg_service_level'] - scenario_results['seasonal']['avg_bullwhip']/10
+    volatility_score = scenario_results['high_volatility']['avg_service_level'] - scenario_results['high_volatility']['avg_bullwhip']/10
+    
+    print(f"\nOverall Performance Winner:")
+    if seasonal_score > volatility_score:
+        print("🏆 SEASONAL scenario performed better overall!")
     else:
-        print("⚠️  Service level needs improvement.")
+        print("🏆 HIGH_VOLATILITY scenario performed better overall!")
 
 if __name__ == "__main__":
     main()
