@@ -678,7 +678,7 @@ def visualize_results(comparison_results, eval_results, train_rewards, train_cos
 def print_detailed_results(comparison_results, eval_results):
     """상세 결과 출력"""
     print("\n" + "="*70)
-    print("🎯 COOPERATIVE MARL UNDER DEC-POMDP 최종 결과")
+    print("COOPERATIVE MARL UNDER DEC-POMDP 최종 결과")
     print("="*70)
     
     print("\n성능 비교 결과:")
@@ -688,7 +688,7 @@ def print_detailed_results(comparison_results, eval_results):
         print(f"{' ':20} | 설명: {results['description']}")
         print("-" * 50)
     
-    print("\n🏆 H-MARL 상세 성과:")
+    print("\n H-MARL 상세 성과:")
     metrics = eval_results['env_metrics']
     print(f"• 평균 총 비용: {metrics['avg_cost']:,.0f}")
     print(f"• 비용 표준편차: {metrics['cost_std']:,.0f}")
@@ -707,7 +707,7 @@ def print_detailed_results(comparison_results, eval_results):
     print(f"• vs Rule-based: {improvement_vs_rule:+.1f}% 비용 절감")
     print(f"• vs Centralized SAC: {improvement_vs_centralized:+.1f}% 비용 절감")
     
-    print("\n🔍 기술적 특징:")
+    print("\n 기술적 특징:")
     print("• Dec-POMDP 환경에서 부분 관측성 문제 해결")
     print("• SAC 기반 연속 행동 공간 최적화")
     print("• 계층별 협력적 의사결정 구조")
@@ -723,29 +723,29 @@ def generate_research_summary():
     ║           in Multi-Echelon FMCG Supply Chains                               ║
     ╚══════════════════════════════════════════════════════════════════════════════╝
     
-    🎯 연구 목표:
+    연구 목표:
     FMCG 산업의 다계층 공급망에서 Dec-POMDP 환경 하에 협력적 다중 에이전트 
     강화학습을 통한 동적 보급 최적화 시스템 개발
     
-    🔬 주요 기술:
+    주요 기술:
     • Dec-POMDP (Decentralized Partially Observable Markov Decision Process)
     • H-MARL (Hierarchical Multi-Agent Reinforcement Learning)
     • SAC (Soft Actor-Critic) 알고리즘
     • 협력적 보상 구조 (Cooperative Reward Structure)
     
-    📊 실험 설계:
+    실험 설계:
     • 4계층 공급망: 소매점 → RDC → 도매상 → 제조업체
     • 상태 공간: 6차원 (재고, 입고량, 수요, 리드타임, 이전주문, 상류재고)
     • 행동 공간: 연속형 주문량 결정
     • 평가 지표: 총 공급망 비용, 재고 변동성, 품절 빈도
 
-    💡 기여도:
+    기여도:
     1. Dec-POMDP 환경에서의 현실적 공급망 모델링
     2. SAC 기반 연속 행동 공간 최적화
     3. 계층적 협력 학습 구조 설계
     4. FMCG 특성 반영한 동적 보급 정책
     
-    🔮 향후 연구:
+    향후 연구:
     • 더 복잡한 네트워크 토폴로지 확장
     • 불확실성 하에서의 robust 최적화
     • 실제 산업 데이터를 활용한 검증
@@ -777,19 +777,7 @@ def main():
         # 4. 연구 요약 출력
         print(generate_research_summary())
         
-        # 5. 추가 분석 데이터 생성
-        print("\n추가 분석 데이터:")
-        print(f"• 총 훈련 에피소드: {len(train_rewards):,}")
-        print(f"• 최종 수렴 보상: {np.mean(train_rewards[-100:]):.2f}")
-        print(f"• 훈련 안정성 (CV): {np.std(train_rewards[-100:]) / abs(np.mean(train_rewards[-100:])) * 100:.1f}%")
-        
-        # 6. 실용적 권장사항
-        print("\n실무 적용 권장사항:")
-        print("• 단계적 도입: 소규모 파일럿 → 점진적 확장")
-        print("• 데이터 품질: 정확한 수요 예측을 위한 데이터 수집 체계 구축")
-        print("• 인프라: 실시간 의사결정을 위한 IT 인프라 구축")
-        print("• 교육: 운영진 대상 AI 기반 SCM 교육 프로그램")
-        
+
         print("\n✅ 시뮬레이션 완료!")
         
     except Exception as e:
