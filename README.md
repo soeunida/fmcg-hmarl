@@ -31,6 +31,7 @@ python3 fmcg_hmarl_baseline.py
 python3 fmcg_hmarl_baseline.py
 
 ---
+
 ### 실험 결과 (Baseline: `fmcg_hmarl_baseline.py`)
 
 | 기법                  | 평균 비용 (↓) | 표준편차 | 설명 |
