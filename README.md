@@ -1,4 +1,4 @@
-# 🧠 Multi-Agent Reinforcement Learning for FMCG Supply Chains
+# [Multi-Agent Reinforcement Learning for FMCG Supply Chains]
 
 본 프로젝트는 **Fast-Moving Consumer Goods (FMCG)** 산업의 **다계층 공급망**에서 재고 보급 정책을 최적화하기 위한 **Multi-Agent Reinforcement Learning (MARL)** 기반 시뮬레이션 및 학습 프레임워크입니다.
 
@@ -6,7 +6,7 @@
 
 ---
 
-## 📁 파일 구성
+## 파일 구성
 
 | 파일명                    | 설명 |
 |---------------------------|------|
@@ -15,7 +15,7 @@
 
 ---
 
-## 🧩 공통 사항
+## 공통 사항
 
 - **공급망 구조**: 4계층 (Retail → RDC → Wholesaler → Manufacturer)
 - **에이전트 수**: 각 계층별 하나씩 (총 4개)
